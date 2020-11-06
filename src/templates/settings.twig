@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Pusher Helper plugin for Craft CMS 3.x
+ *
+ * Pusher Helper Settings.twig
+ *
+ * @author    Element Works Ltd
+ * @copyright Copyright (c) 2020 Element Works Ltd
+ * @link      https://elementworks.co.uk
+ * @package   PusherHelper
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("elementworks\\pusherhelper\\assetbundles\\pusherhelper\\PusherHelperAsset") %}
+
+{{ forms.textField({
+    label: 'Some Field',
+    instructions: 'Enter some setting here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: settings['someAttribute']})
+}}

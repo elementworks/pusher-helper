@@ -1,0 +1,45 @@
+{
+    "name": "elementworks/pusher-helper",
+    "description": "Support functionality for Pusher",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "pusher helper"
+    ],
+    "support": {
+        "docs": "https://github.com/elementworks/pusher-helper/blob/master/README.md",
+        "issues": "https://github.com/elementworks/pusher-helper/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Element Works Ltd",
+            "homepage": "https://elementworks.co.uk"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0",
+        "pusher/pusher-php-server": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "elementworks\\pusherhelper\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Pusher Helper",
+        "handle": "pusher-helper",
+        "developer": "Element Works Ltd",
+        "developerUrl": "https://elementworks.co.uk",
+        "documentationUrl": "https://github.com/elementworks/pusher-helper/blob/master/README.md",
+        "changelogUrl": "https://raw.githubusercontent.com/elementworks/pusher-helper/master/CHANGELOG.md",
+        "components": {
+            "pusher": "elementworks\\pusherhelper\\services\\Pusher"
+        },
+        "class": "elementworks\\pusherhelper\\PusherHelper"
+    }
+}
