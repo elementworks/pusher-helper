@@ -26,6 +26,14 @@ return [
         // Global channel is the name of the fake global presence channel
         // All private presence channels will be named using this as the base, followed by the userId of the user
         // See here for full details: https://support.pusher.com/hc/en-us/articles/360019620253-How-can-I-implement-large-presence-channels-on-Channels-
-        'globalChannel' => 'private-channel-name'
+        'globalChannel' => 'private-presence',
+
+        // User fields to include in global presence messages
+        // This should a be an array of field handles
+        'userFields' => [
+            'id',
+            'firstName',
+            'lastName',
+        ],
     ],
 ];
