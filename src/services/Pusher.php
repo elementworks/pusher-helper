@@ -11,6 +11,7 @@
 namespace elementworks\pusherhelper\services;
 
 use craft\base\Component;
+use craft\elements\User;
 use elementworks\pusherhelper\models\Settings;
 use elementworks\pusherhelper\PusherHelper;
 use Pusher\Pusher as PusherAPI;
@@ -46,6 +47,11 @@ class Pusher extends Component
      * @var Settings
      */
     protected $_settings;
+
+    /**
+     * @var array
+     */
+    protected $_baseUserFields = ['id','firstName','lastName'];
 
     /**
      * PusherController constructor.
@@ -125,6 +131,42 @@ class Pusher extends Component
         }
 
         return $userIds;
+    }
+
+    /**
+     * @throws PusherException
+     */
+    public function getOnlineUserData()
+    {
+        $userIds = $this->getOnlineUserIds();
+
+        // Get user data
+        if ($this->_settings->userFields) {
+            $userQuery = User::find()
+                ->id($userIds);
+
+            $select = [];
+
+            foreach ($this->_settings->userFields as $fieldHandle) {
+                if (in_array($fieldHandle, $this->_baseUserFields, true)) {
+                    $select[] = '{{%users}}.'.$fieldHandle;
+                } else {
+                    $select[] = 'field_'.$fieldHandle.' as '.$fieldHandle;
+                }
+            }
+
+            if ($select) {
+                $userQuery->select($select);
+            }
+
+            $userQuery->asArray(true);
+
+            $userData = $userQuery->all();
+        } else {
+            $userData = $userIds;
+        }
+
+        return $userData;
     }
 
     /**

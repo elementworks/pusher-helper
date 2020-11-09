@@ -83,43 +83,11 @@ class PusherController extends Controller
     {
         $pusherAPI = PusherHelper::$plugin->pusher;
 
-        $userIds = $pusherAPI->getOnlineUserIds();
+        $userData = $pusherAPI->getOnlineUserData();
 
-        // Get user data
-        if ($this->_userFields) {
-            $userQuery = User::find()
-                ->id($userIds);
+        if ($userData) {
+            $message = Json::encode($userData);
 
-            $select = [];
-
-            foreach ($this->_userFields as $fieldHandle) {
-                if (in_array($fieldHandle, $this->_baseUserFields, true)) {
-                    $select[] = '{{%users}}.'.$fieldHandle;
-                } else {
-                    $select[] = 'field_'.$fieldHandle.' as '.$fieldHandle;
-                }
-            }
-
-            if ($select) {
-                $userQuery->select($select);
-            }
-
-            $userQuery->asArray(true);
-
-            $userData = $userQuery->all();
-
-            $messageData = [];
-
-            foreach ($userData as $user) {
-                $messageData[] = $user;
-            }
-
-            $message = Json::encode($messageData);
-        } else {
-            $message = Json::encode($userIds);
-        }
-
-        if ($message) {
             $msgId = (string) time();
             for ($i = 0, $messageLength = strlen($message); $i * $this::MESSAGE_CHUNK_SIZE < $messageLength; $i++) {
                 $pusherAPI->sendMessageToGlobalChannel([
