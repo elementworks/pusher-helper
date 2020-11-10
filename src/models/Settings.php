@@ -85,6 +85,13 @@ class Settings extends Model
      */
     public $userFields = ['id','firstName','lastName'];
 
+    /**
+     * orderBy parameter for User query when returning userData for who's online
+     *
+     * @var string
+     */
+    public $orderBy = 'firstName asc';
+
     // Public Methods
     // =========================================================================
 
@@ -101,11 +108,12 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['appId','appKey','appSecret','appCluster','globalChannel'], 'string'],
+            [['appId','appKey','appSecret','appCluster','globalChannel','orderBy'], 'string'],
             [['useTLS'], 'boolean'],
             ['useTLS', 'default', 'value' => false],
             ['globalChannel', 'default', 'value' => 'private-presence'],
             ['appCluster', 'default', 'value' => 'eu'],
+            ['orderBy', 'default', 'value' => 'firstName asc'],
         ];
     }
 }

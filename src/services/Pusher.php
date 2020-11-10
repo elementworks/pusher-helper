@@ -159,6 +159,10 @@ class Pusher extends Component
                 $userQuery->select($select);
             }
 
+            if ($this->_settings->orderBy) {
+                $userQuery->orderBy($this->_settings->orderBy);
+            }
+
             $userQuery->asArray(true);
 
             $userData = $userQuery->all();
