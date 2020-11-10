@@ -35,5 +35,8 @@ return [
             'firstName',
             'lastName',
         ],
+
+        // Ordering parameter for User query when returning userData for who's online
+        'orderBy' => 'firstName asc',
     ],
 ];
