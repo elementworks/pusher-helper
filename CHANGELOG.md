@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 1.0.5 - 2020-11-18
 ### Changed
-- Change parameter name form `channel-name` to `channelName`
+- Change parameter name from `channel-name` to `channelName`
 
 ## 1.0.4 - 2020-11-18
 ### Added
