@@ -83,7 +83,8 @@ class PusherController extends Controller
             $channelName,
             $event,
             [
-                'sender' => $currentUser->id,
+                'senderId' => $currentUser->id,
+                'senderName' => $currentUser->getFullName(),
                 'message' => $message
             ]
         );
