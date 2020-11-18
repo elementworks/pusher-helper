@@ -75,7 +75,7 @@ class PusherController extends Controller
 
         $message = $request->getRequiredParam('message');
         $event = $request->getRequiredParam('event');
-        $channelName = $request->getRequiredParam('channel-name');
+        $channelName = $request->getRequiredParam('channelName');
 
         $currentUser = Craft::$app->getUser()->getIdentity();
 
