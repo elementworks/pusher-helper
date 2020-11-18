@@ -174,14 +174,15 @@ class Pusher extends Component
     }
 
     /**
+     * @param $channel
+     * @param $event
      * @param $message
      * @return array|bool
-     * @throws PusherException
      */
-    public function sendMessageToGlobalChannel($message)
+    public function sendMessageToChannel($channel, $event, $message)
     {
         if ($this->_pusher) {
-            return $this->_pusher->trigger($this->_settings->globalChannel, 'presence', $message);
+            return $this->_pusher->trigger($channel, $event, $message);
         }
 
         return false;
