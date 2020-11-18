@@ -49,6 +49,11 @@ class PusherController extends Controller
     protected $_userFields;
 
     /**
+     * @var string
+     */
+    protected $_globalChannel;
+
+    /**
      * @var array
      */
     protected $_baseUserFields = ['id','firstName','lastName'];
@@ -63,6 +68,7 @@ class PusherController extends Controller
         parent::init();
 
         $this->_userFields = PusherHelper::$plugin->getSettings()->userFields;
+        $this->_globalChannel = PusherHelper::$plugin->getSettings()->globalChannel;
     }
 
     // Public Methods
@@ -90,12 +96,16 @@ class PusherController extends Controller
 
             $msgId = (string) time();
             for ($i = 0, $messageLength = strlen($message); $i * $this::MESSAGE_CHUNK_SIZE < $messageLength; $i++) {
-                $pusherAPI->sendMessageToGlobalChannel([
-                    'id' => $msgId,
-                    'index' => $i,
-                    'chunk' => substr($message, $i * $this::MESSAGE_CHUNK_SIZE, $this::MESSAGE_CHUNK_SIZE),
-                    'final' => $this::MESSAGE_CHUNK_SIZE * ($i + 1) >= $messageLength
-                ]);
+                $pusherAPI->sendMessageToChannel(
+                    $this->_globalChannel,
+                    'presence',
+                    [
+                        'id' => $msgId,
+                        'index' => $i,
+                        'chunk' => substr($message, $i * $this::MESSAGE_CHUNK_SIZE, $this::MESSAGE_CHUNK_SIZE),
+                        'final' => $this::MESSAGE_CHUNK_SIZE * ($i + 1) >= $messageLength
+                    ]
+                );
             }
 
         }

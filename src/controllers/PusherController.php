@@ -64,4 +64,28 @@ class PusherController extends Controller
 
         return PusherHelper::$plugin->pusher->authenticate($currentUser, $socketId, $channelName);
     }
+
+    public function actionSendMessage()
+    {
+        $this->requirePostRequest();
+        $this->requireAcceptsJson();
+
+        // Cache Craft components
+        $request = Craft::$app->getRequest();
+
+        $message = $request->getRequiredParam('message');
+        $event = $request->getRequiredParam('event');
+        $channelName = $request->getRequiredParam('channel-name');
+
+        $currentUser = Craft::$app->getUser()->getIdentity();
+
+        return PusherHelper::$plugin->pusher->sendMessageToChannel(
+            $channelName,
+            $event,
+            [
+                'sender' => $currentUser->id,
+                'message' => $message
+            ]
+        );
+    }
 }
