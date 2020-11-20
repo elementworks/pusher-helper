@@ -190,7 +190,7 @@ class Pusher extends Component
             $userData = $userQuery->all();
 
             foreach ($userData as $key => $user) {
-                if (in_array($user->id, $chatUserIds, false)) {
+                if (in_array($user['id'], $chatUserIds, false)) {
                     $userData[$key]['inChat'] = true;
                 } else {
                     $userData[$key]['inChat'] = false;
