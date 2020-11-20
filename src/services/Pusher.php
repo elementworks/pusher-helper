@@ -103,15 +103,13 @@ class Pusher extends Component
     }
 
     /**
-     * @throws PusherException
+     * @param array $params
+     * @return array
      */
-    public function getUserChannels()
+    public function getChannels($params = [])
     {
         if ($this->_pusher) {
-            $userChannels = $this->_pusher->get_channels([
-                'filter_by_prefix' => $this->_settings->globalChannel.'-'
-            ]);
-            return $userChannels->channels;
+            return $this->_pusher->get_channels($params)->channels;
         }
 
         return [];
@@ -122,7 +120,9 @@ class Pusher extends Component
      */
     public function getOnlineUserIds()
     {
-        $userChannels = $this->getUserChannels();
+        $userChannels = $this->getChannels([
+            'filter_by_prefix' => $this->_settings->globalChannel.'-'
+        ]);
 
         $userIds = [];
 
@@ -136,9 +136,31 @@ class Pusher extends Component
     /**
      * @throws PusherException
      */
+    public function getChatUserIds()
+    {
+        $userChannels = $this->getChannels([
+            'filter_by_prefix' => 'private-chat-'
+        ]);
+
+        $userIds = [];
+
+        foreach (array_keys($userChannels) as $channel) {
+            $channelNamePieces = explode('-', $channel);
+            $userIds[] = $channelNamePieces[2];
+            $userIds[] = $channelNamePieces[3];
+        }
+
+        return $userIds;
+    }
+
+    /**
+     * @throws PusherException
+     */
     public function getOnlineUserData()
     {
         $userIds = $this->getOnlineUserIds();
+
+        $chatUserIds = $this->getChatUserIds();
 
         // Get user data
         if ($this->_settings->userFields) {
@@ -166,6 +188,14 @@ class Pusher extends Component
             $userQuery->asArray(true);
 
             $userData = $userQuery->all();
+
+            foreach ($userData as $key => $user) {
+                if (in_array($user->id, $chatUserIds, false)) {
+                    $userData[$key]['inChat'] = true;
+                } else {
+                    $userData[$key]['inChat'] = false;
+                }
+            }
         } else {
             $userData = $userIds;
         }
