@@ -103,15 +103,13 @@ class Pusher extends Component
     }
 
     /**
-     * @throws PusherException
+     * @param array $params
+     * @return array
      */
-    public function getUserChannels()
+    public function getChannels($params = [])
     {
         if ($this->_pusher) {
-            $userChannels = $this->_pusher->get_channels([
-                'filter_by_prefix' => $this->_settings->globalChannel.'-'
-            ]);
-            return $userChannels->channels;
+            return $this->_pusher->get_channels($params)->channels;
         }
 
         return [];
@@ -122,7 +120,9 @@ class Pusher extends Component
      */
     public function getOnlineUserIds()
     {
-        $userChannels = $this->getUserChannels();
+        $userChannels = $this->getChannels([
+            'filter_by_prefix' => $this->_settings->globalChannel.'-'
+        ]);
 
         $userIds = [];
 
